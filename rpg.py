@@ -70,16 +70,17 @@ def main():
 #battle
 def battle(p,en):
     #create temporary hp points
-    pthp = p.hp
-    ethp = en.hp
     global pthp
     global ethp
+    pthp = p.hp
+    ethp = en.hp
     
     print(pthp,ethp)
-    def turn():
+    def turn(turn_p,turn_e):
+        
         #determine chance the player hits
-        phitchance = p.hit / (en.lvl * 10)
-        ehitchance = en.hit / (p.lvl * 10)
+        phitchance = (p.hit / (en.lvl * 10)) * 100
+        ehitchance = (en.hit / (p.lvl * 10)) * 100 
         
         #determine if hits
         pr = math.ceil((random.random() * 100))
@@ -89,31 +90,34 @@ def battle(p,en):
         if pr <= phitchance: #hit
         
             if en.defe >= p.att: #0 damage
-                ethp = ethp
+                turn_e = turn_e
             else: #does damage
-                ethp = ethp - (p.att - en.defe)
+                turn_e = turn_e - (p.att - en.defe)
                 
         else: #doesn't hit
-            ethp = ethp
+            turn_e = turn_e
             
         #enemy action
         if enr <= ehitchance: #hit
         
             if p.defe >= en.att: # 0 damage
-                pthp = pthp
+                turn_p = turn_p
             else: #does damage
-                pthp = pthp - (en.att - p.defe)
+                turn_p = turn_p - (en.att - p.defe)
                 
         else: #doesn't hit
-            pthp = pthp
+            turn_p = turn_p
         
-        return pthp, ethp
+        print(turn_p,turn_e)
+        return turn_p, turn_e
+        
         
         
             
     #reiterate turns until player or enemy loses all hp
     while pthp > 0 and ethp > 0:
-        turn()
+        pthp, ethp = turn(pthp,ethp)
+            
 battle(p1,en.mouse)       
 def battleMain():
     action = input("")
